@@ -107,7 +107,7 @@ async def get_stockPrice(type:str,body:Dict):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 # ticker=sheet2.find(isin)
 # TICKER_SYMBOL=sheet2.cell(ticker.row,1).value
 # sheet1 = client.open_by_key('1H3SwCEnn1w8AKxLhrRoCd1ywAIn731bjZlOKtarxoz4').worksheet('Gfinance')
