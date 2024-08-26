@@ -105,7 +105,6 @@ async def get_stockPrice(type:str,body:Dict):
         return {"error":"invalied type"}
             
 
-
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 # ticker=sheet2.find(isin)
