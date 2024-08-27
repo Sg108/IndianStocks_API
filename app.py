@@ -69,8 +69,8 @@ async def home():
             <h1>Stonks API</h1>
             <p>Here you can get historical stock price of any stock registered in NSE</p>
             <ul>handler - /api/get_stock_price/:type , where type can have either ISIN number or stock name</p>
-            <li>with ISIN you need to give type = "isin" and in the body give "ISIN":[[isin number]],"start_date":[[start_date]] and "end_date":[[end_date]]</li>
-            <li>with stock name you need to give type = "Stock_Name" and in the body give "StockName":[[stock name]],"start_date":[[start_date]] and "end_date":[[end_date]]</li>
+            <li>with ISIN you need to give type = "ISIN" and in the body give "ISIN":[[isin number]],"start_date":[[start_date]] and "end_date":[[end_date]]</li>
+            <li>with stock name you need to give type = "Stock_Name" and in the body give "Stock_Name":[[stock name]],"start_date":[[start_date]] and "end_date":[[end_date]]</li>
             </ul>
         </body>
     </html>
@@ -78,18 +78,18 @@ async def home():
 
 @app.get("/api/get_stock_price/{type}")
 async def get_stockPrice(type:str,body:Dict):
-    if "isin" in body.keys():
-        ticker=sheet2.find(body["isin"])
+    if type == "ISIN":
+        ticker=sheet2.find(body["ISIN"])
         if ticker:
             TICKER_SYMBOL=sheet2.cell(ticker.row,1).value
             formula= f'=GOOGLEFINANCE("NSE:{TICKER_SYMBOL}","price", "{body["start_date"]}", "{body["end_date"]}")'
             sheet1.update_cell(1,1,formula)
             time.sleep(1)
             data = sheet1.get_all_values()
-            return {"data":data}
+            return {"ticker":TICKER_SYMBOL,"data":data}
         else:
             return {"error":"invalid isin number"}
-    elif "Stock_Name" in body.keys():
+    elif type == "Stock_Name":
         user_input=body["Stock_Name"]
         ticker = find_closest_ticker(user_input.upper(), dict)
         #print(dict)
@@ -100,9 +100,9 @@ async def get_stockPrice(type:str,body:Dict):
             data = sheet1.get_all_values()
         else:
             return {"error":"invalid stock name"}
-        return {"data":data}
+        return {"ticker":ticker,"data":data}
     else:
-        return {"error":"invalied type"}
+        return {"error":"invalid type"}
             
 
 if __name__ == "__main__":
