@@ -43,13 +43,13 @@ def find_closest_ticker(stock_name, stocks_dict):
 # print(data)
 user_input='SBI CARDS & PAY SER LTD'
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-google_sheets_credentials = os.getenv('Google_Sheet_Cred')
+google_sheets_credentials = os.getenv('Google_Sheets_cred')
 credentials_dict = json.loads(google_sheets_credentials)
-#print(credentials_dict)
+#print(google_sheets_credentials)
 client = gspread.service_account_from_dict(credentials_dict, scopes=scopes)
 #client = gspread.authorize(creds)
-sheet1 = client.open_by_key(os.getenv('Sheet_Id')).worksheet('Gfinance')
-sheet2 = client.open_by_key(os.getenv('Sheet_Id')).worksheet('TickerSheet')
+sheet1 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('Gfinance')
+sheet2 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('TickerSheet')
 dict={}
 ticker_data = sheet2.get_all_values()
 for row in ticker_data:
@@ -106,7 +106,7 @@ async def get_stockPrice(type:str,body:Dict):
             
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 # ticker=sheet2.find(isin)
 # TICKER_SYMBOL=sheet2.cell(ticker.row,1).value
 # sheet1 = client.open_by_key('1H3SwCEnn1w8AKxLhrRoCd1ywAIn731bjZlOKtarxoz4').worksheet('Gfinance')

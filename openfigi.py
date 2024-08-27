@@ -1,4 +1,12 @@
+from dotenv import load_dotenv
+import json
+import os
+import ast
+load_dotenv()
 dict={}
+google_sheets_credentials = os.getenv('Google_Sheets_cred')
+credentials_dict = ast.literal_eval(google_sheets_credentials)
+print(google_sheets_credentials)
 # headers = {
 #     'Content-Type': 'application/json',
 #     'X-OPENFIGI-APIKEY': '025c78bd-1473-4862-8db9-98d08e1618f2',

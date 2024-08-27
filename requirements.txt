@@ -6,7 +6,6 @@ certifi==2024.7.4
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-dotenv
 fastapi==0.112.2
 google-api-core==2.19.1
 google-api-python-client==2.141.0
