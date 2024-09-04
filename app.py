@@ -11,9 +11,17 @@ from fastapi import FastAPI, HTTPException
 from typing import List,Dict
 import uvicorn
 from fastapi.responses import HTMLResponse
-
+from datetime import datetime
+from io import StringIO
 load_dotenv()
 app = FastAPI()
+url2 = "https://nsearchives.nseindia.com/content/equities/eq_etfseclist.csv"
+url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
+
+# Path where you want to save the downloaded file
+file_path = "EQUITY_L.csv"
+headers = {"User-Agent": "Mozilla/5.0"}
+
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
@@ -26,6 +34,41 @@ def find_closest_ticker(stock_name, stocks_dict):
         #return stocks_dict[closest_match]
     else:
         return None
+
+def dataRefresh():
+    #print(datetime.now().strftime("%m/%d/%Y"),datetime.strptime(sheet3.cell(1,1).value,"%m/%d/%Y"))
+    curr_date=datetime.strptime(sheet3.cell(1,1).value,"%m/%d/%Y")
+    #print(curr_date.strftime("%m/%d/%Y"))
+    if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
+        
+
+        response = requests.get(url1, headers=headers)
+        response.raise_for_status()  # Raise an error for bad responses
+
+        csv_content = response.text
+        df = pd.read_csv(StringIO(csv_content))
+        df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
+        df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
+        response = requests.get(url2, headers=headers)
+        response.raise_for_status()  # Raise an error for bad responses
+        csv_content = response.text
+        df1 = pd.read_csv(StringIO(csv_content))
+        df1=df1[['Symbol','ISINNumber','SecurityName']]
+        df1=df1.rename(columns={'Symbol':'SYMBOL','ISINNumber':'ISIN NUMBER','SecurityName':'STOCK NAME'})
+        df_combined = pd.concat([df,df1], ignore_index=True)
+        #print(df_combined)
+        data = df_combined.values.tolist()
+        # Insert headers if needed
+        headings = df_combined.columns.tolist()
+        data.insert(0, headings)
+        print(data)
+        # Update the worksheet with new data
+        sheet2.update('A1', data)
+        
+        sheet3.update_cell(1,1,datetime.now().strftime("%m/%d/%Y"))
+    else:
+        print("already refreshed")
+    
 
 # Replace with your Financial Modeling Prep API Key
 # api_key = 'oBAjwF53F4f0TGlBrkDtbwMlULiRp8pb'
@@ -44,12 +87,14 @@ def find_closest_ticker(stock_name, stocks_dict):
 user_input='SBI CARDS & PAY SER LTD'
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 google_sheets_credentials = os.getenv('Google_Sheets_cred')
-credentials_dict = json.loads(google_sheets_credentials)
 #print(google_sheets_credentials)
+credentials_dict = json.loads(google_sheets_credentials)
+#creds = Credentials.from_service_account_file('credentials.json', scopes=scopes)
 client = gspread.service_account_from_dict(credentials_dict, scopes=scopes)
 #client = gspread.authorize(creds)
 sheet1 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('Gfinance')
 sheet2 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('TickerSheet')
+sheet3 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('CurrentRefreshDate')
 dict={}
 ticker_data = sheet2.get_all_values()
 for row in ticker_data:
@@ -78,6 +123,7 @@ async def home():
 
 @app.get("/api/get_stock_price/{type}")
 async def get_stockPrice(type:str,body:Dict):
+    dataRefresh()
     if type == "ISIN":
         ticker=sheet2.find(body["ISIN"])
         if ticker:

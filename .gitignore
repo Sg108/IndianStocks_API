@@ -3,3 +3,6 @@ Scripts
 Lib
 Include
 .vercel
+credentials.json
+EQUITY_L.csv
+test.py
