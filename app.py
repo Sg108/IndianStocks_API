@@ -123,7 +123,7 @@ async def home():
 
 @app.get("/api/get_stock_price/{type}")
 async def get_stockPrice(type:str,body:Dict):
-    dataRefresh()
+    #dataRefresh()
     if type == "ISIN":
         ticker=sheet2.find(body["ISIN"])
         if ticker:
