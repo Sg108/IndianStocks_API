@@ -21,7 +21,7 @@ url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 # Path where you want to save the downloaded file
 file_path = "EQUITY_L.csv"
 
-headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"}
+headers = {"User-Agent": "Mozilla/5.0"}
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
