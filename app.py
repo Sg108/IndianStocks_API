@@ -42,14 +42,14 @@ def dataRefresh():
     if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
         
 
-        response = requests.get(url1, headers=headers)
+        response = requests.get(url1, headers=headers, timeout=20)
         response.raise_for_status()  # Raise an error for bad responses
 
         csv_content = response.text
         df = pd.read_csv(StringIO(csv_content))
         df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
         df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = requests.get(url2, headers=headers)
+        response = requests.get(url2, headers=headers, timeout=20)
         response.raise_for_status()  # Raise an error for bad responses
         csv_content = response.text
         df1 = pd.read_csv(StringIO(csv_content))
