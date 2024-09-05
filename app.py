@@ -49,17 +49,17 @@ def dataRefresh():
         df = pd.read_csv(StringIO(csv_content))
         df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
         df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = requests.get(url2, headers=headers, timeout=50)
-        response.raise_for_status()  # Raise an error for bad responses
-        csv_content = response.text
-        df1 = pd.read_csv(StringIO(csv_content))
-        df1=df1[['Symbol','ISINNumber','SecurityName']]
-        df1=df1.rename(columns={'Symbol':'SYMBOL','ISINNumber':'ISIN NUMBER','SecurityName':'STOCK NAME'})
-        df_combined = pd.concat([df,df1], ignore_index=True)
+        # response = requests.get(url2, headers=headers, timeout=50)
+        # response.raise_for_status()  # Raise an error for bad responses
+        # csv_content = response.text
+        # df1 = pd.read_csv(StringIO(csv_content))
+        # df1=df1[['Symbol','ISINNumber','SecurityName']]
+        # df1=df1.rename(columns={'Symbol':'SYMBOL','ISINNumber':'ISIN NUMBER','SecurityName':'STOCK NAME'})
+        # df_combined = pd.concat([df,df1], ignore_index=True)
         #print(df_combined)
-        data = df_combined.values.tolist()
+        data = df.values.tolist()
         # Insert headers if needed
-        headings = df_combined.columns.tolist()
+        headings = df.columns.tolist()
         data.insert(0, headings)
         print(data)
         # Update the worksheet with new data
