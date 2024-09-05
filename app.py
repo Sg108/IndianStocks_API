@@ -42,7 +42,7 @@ def dataRefresh():
     if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
         
 
-        response = requests.get(url1, headers=headers, timeout=20)
+        response = requests.get(url1, headers=headers, timeout=30)
         response.raise_for_status()  # Raise an error for bad responses
 
         csv_content = response.text
