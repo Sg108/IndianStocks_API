@@ -21,7 +21,10 @@ url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 # Path where you want to save the downloaded file
 file_path = "EQUITY_L.csv"
 
-headers = {"User-Agent": "vercel-screenshot/1.0"}
+headers = {'User-Agent': 'Mozilla/5.0',
+    'Referer': 'https://www.nseindia.com',
+    'Accept': 'text/csv,application/csv,application/octet-stream',
+    'Connection': 'keep-alive'}
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
