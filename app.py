@@ -45,23 +45,23 @@ def dataRefresh():
     if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
         
 
-        # response = requests.get(url1, headers=headers, timeout=50)
-        # response.raise_for_status()  # Raise an error for bad responses
+        response = requests.get(url1, headers=headers,timeout=60)
+        response.raise_for_status()  # Raise an error for bad responses
 
-        # csv_content = response.text
-        # df = pd.read_csv(StringIO(csv_content))
-        # df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
-        # df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = requests.get(url2,headers=headers)
+        csv_content = response.text
+        df = pd.read_csv(StringIO(csv_content))
+        df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
+        df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
+        response = requests.get(url2,headers=headers,timeout=60)
         response.raise_for_status()  # Raise an error for bad responses
         csv_content = response.text
         df1 = pd.read_csv(StringIO(csv_content))
         df1=df1[['Symbol','ISINNumber','SecurityName']]
         df1=df1.rename(columns={'Symbol':'SYMBOL','ISINNumber':'ISIN NUMBER','SecurityName':'STOCK NAME'})
-        # df_combined = pd.concat([df,df1], ignore_index=True)
+        df_combined = pd.concat([df,df1], ignore_index=True)
         # print(df_combined)
-        data = df1.values.tolist()
-        headings = df1.columns.tolist()
+        data = df_combined.values.tolist()
+        headings = df_combined.columns.tolist()
         data.insert(0, headings)
         print(data)
         # Update the worksheet with new data
