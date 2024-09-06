@@ -58,7 +58,6 @@ def dataRefresh():
         # df_combined = pd.concat([df,df1], ignore_index=True)
         # print(df_combined)
         data = df1.values.tolist()
-        # Insert headers if needed
         headings = df1.columns.tolist()
         data.insert(0, headings)
         print(data)
