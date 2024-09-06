@@ -22,11 +22,11 @@ url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 file_path = "EQUITY_L.csv"
 
 headers = {
-    'Host': 'nsearchives.nseindia.com', 
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Referer': 'https://www.nseindia.com',
     'Accept': 'text/csv,application/csv,application/octet-stream',
-    'Connection': 'keep-alive'}
+    'Connection': 'keep-alive',
+    'X-Protocol': 'https'}
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
