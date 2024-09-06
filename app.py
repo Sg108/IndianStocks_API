@@ -21,7 +21,9 @@ url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 # Path where you want to save the downloaded file
 file_path = "EQUITY_L.csv"
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+headers = {
+    'Host': 'nsearchives.nseindia.com', 
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Referer': 'https://www.nseindia.com',
     'Accept': 'text/csv,application/csv,application/octet-stream',
     'Connection': 'keep-alive'}
