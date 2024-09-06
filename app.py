@@ -21,7 +21,7 @@ url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 # Path where you want to save the downloaded file
 file_path = "EQUITY_L.csv"
 
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+headers = {"User-Agent": "vercel-screenshot/1.0"}
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
@@ -49,7 +49,7 @@ def dataRefresh():
         # df = pd.read_csv(StringIO(csv_content))
         # df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
         # df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = requests.get(url2)
+        response = requests.get(url2,headers=headers)
         response.raise_for_status()  # Raise an error for bad responses
         csv_content = response.text
         df1 = pd.read_csv(StringIO(csv_content))
