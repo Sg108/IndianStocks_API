@@ -98,12 +98,12 @@ def dataRefresh():
 # print(data)
 user_input='SBI CARDS & PAY SER LTD'
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-google_sheets_credentials = os.getenv('Google_Sheets_cred')
+#google_sheets_credentials = os.getenv('Google_Sheets_cred')
 #print(google_sheets_credentials)
-credentials_dict = json.loads(google_sheets_credentials)
-#creds = Credentials.from_service_account_file('credentials.json', scopes=scopes)
-client = gspread.service_account_from_dict(credentials_dict, scopes=scopes)
-#client = gspread.authorize(creds)
+#credentials_dict = json.loads(google_sheets_credentials)
+creds = Credentials.from_service_account_file('credentials.json', scopes=scopes)
+#client = gspread.service_account_from_dict(credentials_dict, scopes=scopes)
+client = gspread.authorize(creds)
 sheet1 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('Gfinance')
 sheet2 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('TickerSheet')
 sheet3 = client.open_by_key(os.getenv('Sheet_ID')).worksheet('CurrentRefreshDate')
