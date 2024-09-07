@@ -18,15 +18,18 @@ app = FastAPI()
 url2 = "https://nsearchives.nseindia.com/content/equities/eq_etfseclist.csv"
 url1 = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 
+import requests
+
+base_url = "https://www.nseindia.com/"
+
+
+
 # Path where you want to save the downloaded file
 file_path = "EQUITY_L.csv"
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'Referer': 'https://www.nseindia.com',
-    'Accept': 'text/csv,application/csv,application/octet-stream',
-    'Connection': 'keep-alive',
-    'X-Protocol': 'https'}
+    }
 
 def find_closest_ticker(stock_name, stocks_dict):
     # Get the closest match from the stock names
@@ -46,15 +49,19 @@ def dataRefresh():
     #print(curr_date.strftime("%m/%d/%Y"))
     if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
         
-
-        response = requests.get(url1, headers=headers,timeout=60)
+        session = requests.Session()
+        request = session.get(base_url, headers=headers, timeout=20)
+        cookies = request.cookies
+        response = session.get(url1, headers=headers, timeout=20, cookies=cookies)
+        #response = requests.get(url1, headers=headers,timeout=60)
         response.raise_for_status()  # Raise an error for bad responses
 
         csv_content = response.text
         df = pd.read_csv(StringIO(csv_content))
+        print(df)
         df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
         df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = requests.get(url2,headers=headers,timeout=60)
+        response = session.get(url2, headers=headers, timeout=20, cookies=cookies)
         response.raise_for_status()  # Raise an error for bad responses
         csv_content = response.text
         df1 = pd.read_csv(StringIO(csv_content))
