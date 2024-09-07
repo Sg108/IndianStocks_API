@@ -28,7 +28,7 @@ base_url = "https://www.nseindia.com/"
 file_path = "EQUITY_L.csv"
 
 headers = {
-    'User-Agent': 'Mozilla/5.0',
+    'User-Agent': 'Mozilla/5.0'
     }
 
 def find_closest_ticker(stock_name, stocks_dict):
@@ -49,10 +49,10 @@ def dataRefresh():
     #print(curr_date.strftime("%m/%d/%Y"))
     if curr_date.strftime("%m/%d/%Y")!=datetime.now().strftime("%m/%d/%Y"):
         
-        session = requests.Session()
-        request = session.get(base_url, headers=headers, timeout=20)
-        cookies = request.cookies
-        response = session.get(url1, headers=headers, timeout=20, cookies=cookies)
+        s = requests.Session()
+        s.headers.update(headers)
+        response = s.get(url1)
+        
         #response = requests.get(url1, headers=headers,timeout=60)
         response.raise_for_status()  # Raise an error for bad responses
 
@@ -61,13 +61,14 @@ def dataRefresh():
         print(df)
         df=df[['SYMBOL',' ISIN NUMBER','NAME OF COMPANY']]
         df=df.rename(columns={'NAME OF COMPANY':'STOCK NAME',' ISIN NUMBER':'ISIN NUMBER'})
-        response = session.get(url2, headers=headers, timeout=20, cookies=cookies)
+        response = s.get(url2)
         response.raise_for_status()  # Raise an error for bad responses
         csv_content = response.text
         df1 = pd.read_csv(StringIO(csv_content))
         df1=df1[['Symbol','ISINNumber','SecurityName']]
         df1=df1.rename(columns={'Symbol':'SYMBOL','ISINNumber':'ISIN NUMBER','SecurityName':'STOCK NAME'})
         df_combined = pd.concat([df,df1], ignore_index=True)
+        s.close()
         # print(df_combined)
         data = df_combined.values.tolist()
         headings = df_combined.columns.tolist()
